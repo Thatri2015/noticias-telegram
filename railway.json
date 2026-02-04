@@ -1,0 +1,12 @@
+{
+  "cron": [
+    {
+      "command": "python bot.py",
+      "schedule": "30 7 * * 1-5"
+    },
+    {
+      "command": "python bot.py",
+      "schedule": "0 8 * * 6"
+    }
+  ]
+}
