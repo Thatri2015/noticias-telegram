@@ -1,6 +1,6 @@
 import os
 import requests
-from datetime import datetime
+import feedparser
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = "-1003899535115"  # canal Noticias
@@ -14,7 +14,19 @@ def enviar(mensagem):
     }
     requests.post(url, data=payload)
 
-if __name__ == "__main__":
-    hoje = datetime.now().strftime("%d/%m/%Y")
-    mensagem = f"🗞️ Bot de notícias ativo ✅\nData: {hoje}"
-    enviar(mensagem)
+feeds = [
+    "https://clicrdc.com.br/feed/",
+    "https://g1.globo.com/sc/santa-catarina/rss/ultimas.xml"
+]
+
+mensagem = "🏙️ TESTE FORÇADO – CHAPECÓ / OESTE DE SC\n\n"
+
+for feed_url in feeds:
+    feed = feedparser.parse(feed_url)
+    for entry in feed.entries[:3]:
+        titulo = entry.title
+        link = entry.link
+        resumo = entry.summary[:120].replace("<p>", "").replace("</p>", "")
+        mensagem += f"• {titulo}\n{link}\n\n"
+
+enviar(mensagem)
